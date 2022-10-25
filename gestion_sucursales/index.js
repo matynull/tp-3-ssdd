@@ -1,25 +1,41 @@
-const http = require('http');
+import { createServer } from 'http';
+import { readFileSync } from 'fs';
 
-const server = http.createServer(function (req, res) {
-    
+const server = createServer(async (req, res) => {
     console.log(req.url);
 
-    if(req.url.startsWith("/api/sucursales")){
-        let urlArr = req.url.split("/");
-        console.log(urlArr);
-        res.writeHead(200, { "Content-Type": "application/json" });
-        if(urlArr.length >= 3){
-            res.end(JSON.stringify({"id" : urlArr[2], "contenido" : "Una sola sucursal"}));
-        }else{
-            res.end(JSON.stringify({"contenido" : "Todas las sucursales"}));
+    //Limpia url
+    let parsedUrl = req.url.trim();
+    parsedUrl = parsedUrl.replace(/^\/+|\/+$/g, "");
+
+    const data = readFileSync('./sucursales.json',
+        { encoding: 'utf8', flag: 'r' });
+    let sucursales = JSON.parse(data);
+    console.log(sucursales);
+
+    if (req.url.startsWith("/api/sucursales")) {
+        let urlArr = parsedUrl.split("/");
+        if (urlArr.length >= 3 && !isNaN(urlArr[2])) {
+            let idSucursal = parseInt(urlArr[2]);
+            let sucursal = sucursales.find(x => x.id == idSucursal);
+            if (!sucursal) {
+                res.writeHead(404, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(`No se encontro la sucursal ${idSucursal}`));
+            } else {
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(sucursal));
+            }
+        } else {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify(sucursales));
         }
-    }else{
+    } else {
         res.writeHead(404, { "Content-Type": "application/json" });
         res.end("No se encontro el recurso.");
     }
-    
+
 });
 
-server.listen(8080, function() {
-  console.log('Server started');
+server.listen(8080, function () {
+    console.log('Server started');
 });
