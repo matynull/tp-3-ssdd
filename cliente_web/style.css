@@ -1,11 +1,21 @@
-body {
+
+body{
+  background-color: #6e758d;
+}
+
+#datosentrada {
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto;
-    height: 100vh;
-    background-color: #6272a4;
+    height: 20vh;
   }
+
+#mapas{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 /* input {
     display: flex;
