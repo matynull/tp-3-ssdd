@@ -1,11 +1,11 @@
 {
-  "name": "gestion_sucursales",
+  "name": "sistema-turnos",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev" : "nodemon index.js"
+    "dev" : "nodemon gestion_sucursales/index.js"
   },
   "author": "",
   "license": "ISC",
