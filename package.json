@@ -2,14 +2,17 @@
   "name": "sistema-turnos",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev-sucursal" : "nodemon gestion_sucursales/index.js"
+    "dev-sucursal": "nodemon gestion_sucursales/index.js",
+    "dev-noti": "nodemon notificaciones/index.cjs"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3"
   }
 }
