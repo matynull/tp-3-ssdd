@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev" : "nodemon gestion_sucursales/index.js"
+    "dev-sucursal" : "nodemon gestion_sucursales/index.js"
   },
   "author": "",
   "license": "ISC",
