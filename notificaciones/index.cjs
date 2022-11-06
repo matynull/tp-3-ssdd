@@ -1,46 +1,90 @@
-
-const http = require('https');
+const https = require('https');
+const http = require('http');
 require('dotenv').config()
 
-let options ={
-    "method":"POST",
-    "host":"api.sendgrid.com",
-    "path":"/v3/mail/send",
-    "headers":{
-        "Authorization":`${process.env.API_KEY}`,
-        "Content-Type": "application/json"
-    }
-};
+/*
+Envio de mail
+POST /api/notificacion 
 
-let data = {
-    "personalizations":[
-        {
-            "to":[
-                {
-                    "email":"lucagutierrez@hotmail.com",
-                    "name":"Pelusa Gutierrez"
-                }
-            ],
-            "subject":"Hello world"
-        }
-    ],
-    "content": [{"type": "text/plain", "value": "Heya!"}],
-    "from":{"email":`${process.env.MAIL}`,"name":"Matias"},
-    "reply_to":{"email":`${process.env.MAIL}`,"name":"Matias"}
+{
+  “destinatario”:string
+  “asunto”:string
+  “cuerpo”:string
 }
 
-const request = http.request(options, function (response) {
+*/
 
-  let body = ''
-  response.on('data',function(chunk){
-    body+=chunk;
-  });
+const server = http.createServer(async (req, res) => {
+    console.log(req.url);
 
-  response.on('end',function(){
-    console.log(body);
-  });
+    //Limpia url
+    let parsedUrl = req.url.trim();
+    parsedUrl = parsedUrl.replace(/^\/+|\/+$/g, "");
+    let options = "";
 
+    if (req.url.startsWith("/api/notificacion") && req.method === 'POST') {
+        req.on('data', (chunk) => {
+            options += chunk;
+        }).on('end', () => {
+            sendMail(JSON.parse(options), (statusCode) => {
+                res.writeHead(statusCode);
+                res.end();
+            });
+        })
+    } else {
+        res.writeHead(404, { "Content-Type": "application/json" });
+        res.end("No se encontro el recurso.");
+    }
 
 });
-request.write(JSON.stringify(data));
-request.end();
+
+server.listen(8080, function () {
+    console.log('Server started');
+});
+
+
+// Todo esto es para mandar mail con sendgrid
+
+let sendMail = (options,callback) => {
+    let emailOptions = {
+        "method": "POST",
+        "host": "api.sendgrid.com",
+        "path": "/v3/mail/send",
+        "headers": {
+            "Authorization": `${process.env.API_KEY}`,
+            "Content-Type": "application/json"
+        }
+    };
+
+    let data = {
+        "personalizations": [
+            {
+                "to": [
+                    {
+                        "email": options.destinatario
+                        // "name":"Pelusa Gutierrez"
+                    }
+                ],
+                "subject": options.asunto
+            }
+        ],
+        "content": [{ "type": "text/plain", "value": options.cuerpo }],
+        "from": { "email": `${process.env.MAIL}`, "name": "Matias" },
+        "reply_to": { "email": `${process.env.MAIL}`, "name": "Matias" }
+    }
+
+    const request = https.request(emailOptions, function (response) {
+
+        let body = ''
+        response.on('data', function (chunk) {
+            body += chunk;
+        });
+
+        response.on('end', function () {
+            callback(response.statusCode);
+        });
+
+    });
+    request.write(JSON.stringify(data));
+    request.end();
+}
