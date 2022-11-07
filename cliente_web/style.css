@@ -1,26 +1,26 @@
 
 body{
-  background-color: #6e758d;
+  background-color: #282a36;
+  color:rgb(255, 255, 255)
 }
-
 #datosentrada {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-    height: 20vh;
-  }
+  width: 400px;
+  background: #24303c;
+  padding: 40px;
+  margin: left;
+  margin-top: 300px;
+  margin-left: 250px;
+  border-radius: 30px;
+  font-family: 'calibri';
+  font-size:x-large;
+  color: white;
+  box-shadow: 7px 13px 37px #000;
+}
 
 #mapas{
   display: flex;
-  align-items: center;
-  justify-content: center;
+  justify-content: right;
+  margin-top: -375px;
   
-}
+} 
 
-/* input {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-  } */
