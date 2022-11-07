@@ -6,26 +6,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cliente Web</title>
-
     <link href="style.css" rel="stylesheet">
-
+    <script src="index.js"></script>
 </head>
 
 <body>
-    <div id="datosentrada">
-        <label for="email">Ingrese su E-mail </label>
+    <!-- FORMULARIO -->
+    <form id="datosentrada">
+        <label name="email">Ingrese su E-mail </label>
         <input type="email" id="email" > <br>
         <br>
 
-        <label for="fecha">Ingrese el dia </label>  <!-- esto hay que cambiarlo creo -->
+        <label name="fecha">Ingrese el dia </label>  <!-- esto hay que cambiarlo creo -->
         <input type="date" id="fecha"><br>
         <br>
 
-        <label for="horario">Seleccione el horario </label>
+        <label name="horario">Seleccione el horario </label>
         <input type="time" id="horario"><br>
         <br>
         
-        <label for="sucursales">Seleccione la sucursal </label>
+        <label name="sucursales">Seleccione la sucursal </label>
         <select id="sucursales">
             <option value="1">1</option>
             <option value="2">2</option>
@@ -33,17 +33,18 @@
             <option value="4">4</option>
         </select>
         <br>
-    </div>
-
+        <button type="button" onclick="recibeDatos()">Enviar</button>
+        
+    </form>
+    <!-- MAPA -->
     <div id="mapas">
-        <iframe src="https://app.cartes.io/maps/695eec4d-cec4-40e5-9d20-c6fca874a941/embed?type=map&lat=-37.99299224038733&lng=-57.57084846496583&zoom=13"
+        <!-- <iframe src="https://app.cartes.io/maps/695eec4d-cec4-40e5-9d20-c6fca874a941/embed?type=map&lat=-37.99299224038733&lng=-57.57084846496583&zoom=13"
         width="50%"
         height="600"
         frameborder="0">
-        </iframe>
+        </iframe> -->
     </div>
     
-        <script src="index.js" type="module"></script>
     
 </body>
 </html>
