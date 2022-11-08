@@ -2,18 +2,6 @@ const https = require('https');
 const http = require('http');
 require('dotenv').config()
 
-/*
-Envio de mail
-POST /api/notificacion 
-
-{
-  “destinatario”:string
-  “asunto”:string
-  “cuerpo”:string
-}
-
-*/
-
 const server = http.createServer(async (req, res) => {
     console.log(req.url);
 
@@ -42,7 +30,6 @@ server.listen(8080, function () {
     console.log('Server started');
 });
 
-
 // Todo esto es para mandar mail con sendgrid
 
 let sendMail = (options,callback) => {
@@ -62,7 +49,6 @@ let sendMail = (options,callback) => {
                 "to": [
                     {
                         "email": options.destinatario
-                        // "name":"Pelusa Gutierrez"
                     }
                 ],
                 "subject": options.asunto

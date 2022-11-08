@@ -2,10 +2,11 @@
   "name": "sistema-turnos",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev-sucursal": "nodemon gestion_sucursales/index.js",
-    "dev-noti": "nodemon notificaciones/index.cjs"
+    "dev-noti": "nodemon notificaciones/index.cjs",
+    "dev-reserva": "nodemon gestion-reservas/index.js"
   },
   "author": "",
   "license": "ISC",
