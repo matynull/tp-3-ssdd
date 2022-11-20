@@ -6,7 +6,8 @@
   "scripts": {
     "dev-sucursal": "nodemon gestion_sucursales/index.js",
     "dev-noti": "nodemon notificaciones/index.cjs",
-    "dev-reserva": "nodemon gestion-reservas/index.js"
+    "dev-reserva": "nodemon gestion-reservas/index.js",
+    "dev-recordatorio": "nodemon gestion-recordatorios/index.js"
   },
   "nodemonConfig": {
     "ignore": ["package.json","./gestion-reservas/turnos.json"]
