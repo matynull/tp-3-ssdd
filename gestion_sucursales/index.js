@@ -11,7 +11,6 @@ const server = createServer(async (req, res) => {
     const data = readFileSync('./gestion_sucursales/sucursales.json',
         { encoding: 'utf8', flag: 'r' });
     let sucursales = JSON.parse(data);
-    //console.log(sucursales);
 
     if (req.url.startsWith("/api/sucursales") && req.method == 'GET') {
         let urlArr = parsedUrl.split("/");
