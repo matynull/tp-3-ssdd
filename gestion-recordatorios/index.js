@@ -24,8 +24,6 @@ const checkNotificaciones = () => {
             }
         });
     });
-
-    console.log(aNotificar);
 }
 
 const sendNotification = (email, datetime, callback) => {
