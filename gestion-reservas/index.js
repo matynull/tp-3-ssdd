@@ -10,6 +10,7 @@ const queueReservas = [];
 
 const server = http.createServer(async (req, res) => {
     console.log(req.url);
+    res.setHeader("Access-Control-Allow-Origin", "*");
 
     //Limpia url
     let parsedUrl = req.url.trim();
