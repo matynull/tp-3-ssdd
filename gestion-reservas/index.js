@@ -53,7 +53,7 @@ const server = http.createServer(async (req, res) => {
             queryParams = url.parse(req.url, true).query;
             let results = reservas.filter(function (entry) {
                 return Object.keys(queryParams).every(function (key) {
-                    return entry[key] === queryParams[key];
+                    return entry[key] == queryParams[key];
                 });
             });
             console.log(results);
