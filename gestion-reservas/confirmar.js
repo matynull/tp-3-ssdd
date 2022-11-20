@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const solicitar = function (req, res, body) {
+const solicitar = function (req, res) {
     let parsedUrl = req.url;
     let urlArr = parsedUrl.split("/");
     if (urlArr.length == 5 && !isNaN(urlArr[4])) {
@@ -12,14 +12,12 @@ const solicitar = function (req, res, body) {
         if (!reserva) {
             res.writeHead(404, { "Content-Type": "application/json" });
             res.end(JSON.stringify(`No se encontro la reserva ${idReserva}`));
-        } else if (reserva.status != 0) {
+        } else if (reserva.status != 1) {
             res.writeHead(400, { "Content-Type": "application/json" });
             res.end(JSON.stringify(`La reserva ya tiene usuario asignado`));
         } else {
             let index = reservas.findIndex((i) => i.idReserva == reserva.idReserva);
-            reserva.status = 1;
-            reserva.email = body.email;
-            reserva.userId = body.userId;
+            reserva.status = 2;
             reservas[index] = reserva;
             let reservasJSON = JSON.stringify(reservas)
             fs.writeFile('./gestion-reservas/turnos.json', reservasJSON, (err, data) => {

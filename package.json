@@ -8,6 +8,9 @@
     "dev-noti": "nodemon notificaciones/index.cjs",
     "dev-reserva": "nodemon gestion-reservas/index.js"
   },
+  "nodemonConfig": {
+    "ignore": ["package.json","./gestion-reservas/turnos.json"]
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
