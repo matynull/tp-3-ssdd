@@ -12,28 +12,15 @@ function recibeDatos(){
     botonenv.addEventListener("click",function(event){
         const res=fetch
     });
-
 }
 
 //POST /api/
-const req= fetch(`https://localhost:1010/api`, {
-    method: "POST",
-    headers:" 'Accept': 'application/json'",
-    body:JSON.stringify({
-        "dateTime":date,//aca va fecha con hora
-        "userId":0, //0
-        "email":email,
-        "branchId":sucursal
-    })
-
+const pedirReservas = fetch(`https://localhost:8080/api/reservas`, {
+    method: "GET",
+    headers:" 'Accept': 'application/json'"
 }).then(res=>{
-    if(res.status==200){
-
-    }
-    else{
-        console.log("error")
-    }
-})
+    console.log(res);
+});
 
 
 //DELETE /api/
