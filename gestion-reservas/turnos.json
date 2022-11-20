@@ -1,0 +1,34 @@
+[
+    {
+        "idReserva": 1,
+        "datetime": "2022-11-22T10:00:00.000Z",
+        "userId": -1,
+        "email": null,
+        "branchId": 1,
+        "status": 0
+    },
+    {
+        "idReserva": 2,
+        "datetime": "2022-11-25T10:30:00.000Z",
+        "userId": -1,
+        "email": null,
+        "branchId": 1,
+        "status": 0
+    },
+    {
+        "idReserva": 3,
+        "datetime": "2022-11-21T21:00:00.000Z",
+        "userId": -1,
+        "email": null,
+        "branchId": 1,
+        "status": 0
+    },
+    {
+        "idReserva": 4,
+        "datetime": "2022-11-21T21:00:00.000Z",
+        "userId": -1,
+        "email": null,
+        "branchId": 1,
+        "status": 0
+    }
+]
