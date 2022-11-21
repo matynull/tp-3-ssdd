@@ -1,7 +1,9 @@
 const http = require('http');
 const fs = require('fs');
+require('dotenv').config()
 
-const intervalo = 5;
+const intervalo = process.env.INTERVALO_CHECK_NOTIFICACION;
+console.log(`Iniciando intervalo en: ${intervalo} segundos`);
 let notificados = [];
 
 const checkNotificaciones = () => {
@@ -10,7 +12,6 @@ const checkNotificaciones = () => {
                 { encoding: 'utf8', flag: 'r' });
     let reservas = JSON.parse(data);
     let aNotificar = reservas.filter((reserva) => {
-        // console.log(new Date());
         let dif = (new Date(reserva.datetime) - new Date())/(1000*60*60);
         return dif > 0 && dif < 24 && !notificados.includes(reserva.idReserva) && reserva.userId != -1 && reserva.status == 2;
     });
@@ -41,7 +42,7 @@ const sendNotification = (email, datetime, callback) => {
     let data = {
         "destinatario":email,
         "asunto":"Notificación de turno",
-        "cuerpo":`Esto es un recordatorio de que tenes un turno el dia: ${d.getDay().toString().padStart(2, "0")}/${d.getMonth().toString().padStart(2, "0")}/${d.getFullYear().toString()} a las ${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`
+        "cuerpo":`Esto es un recordatorio de que tenes un turno el dia: ${d.getDate().toString().padStart(2, "0")}/${d.getMonth().toString().padStart(2, "0")}/${d.getFullYear().toString()} a las ${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`
     }      
 
     const request = http.request(options, function (response) {
