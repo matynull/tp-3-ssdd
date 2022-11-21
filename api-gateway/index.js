@@ -47,6 +47,7 @@ const server = http.createServer(async (req, res) => {
                     });
             
                     proxyRes.on('end', function () {
+                        res.writeHead(proxyRes.statusCode, proxyRes.headers);
                         res.write(proxyBody)
                         res.end();
                     });
