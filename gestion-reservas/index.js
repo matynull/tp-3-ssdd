@@ -18,16 +18,22 @@ const server = http.createServer(async (req, res) => {
     let urlArr = parsedUrl.split("/");
 
     if (req.url.startsWith("/api/reservas/confirmar") && req.method == 'POST') {
-        let date = confirmar(req, res);
-        console.log(date);
-        let idReserva = urlArr[3];
-        let reservaConfirmada = queueReservas.find(x => x.idReserva == idReserva);
-        let index = queueReservas.findIndex((i) => i.idReserva == reservaConfirmada.idReserva);
-        clearTimeout(reservaConfirmada.idTimeOut);
-        sendNotification(reservaConfirmada.email, date, (statusCode) => {
-            console.log(statusCode);
+        let options = "";
+        req.on('data', (chunk) => {
+            options += chunk.toString();
+        }).on('end', () => {
+          let body = JSON.parse(options);
+          let date = confirmar(req, res);
+          console.log(date);
+          let idReserva = urlArr[3];
+          let reservaConfirmada = queueReservas.find(x => x.idReserva == idReserva);
+          let index = queueReservas.findIndex((i) => i.idReserva == reservaConfirmada.idReserva);
+          clearTimeout(reservaConfirmada.idTimeOut);
+          sendNotification(reservaConfirmada.email, date, (statusCode) => {
+              console.log(statusCode);
+          })
+          queueReservas.splice(index);
         })
-        queueReservas.splice(index);
     } else if (req.url.startsWith("/api/reservas/solicitar") && req.method == 'POST') {
         let options = "";
         req.on('data', (chunk) => {

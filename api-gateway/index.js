@@ -33,7 +33,10 @@ const server = http.createServer(async (req, res) => {
                     "method": req.method,
                     "host": urlMapping[urlArr[1]].host,
                     "port": urlMapping[urlArr[1]].port,
-                    "path": req.url
+                    "path": req.url,
+                    "headers": {
+                        "Content-Type": "application/json"
+                    }
                 };
                 console.log(options);
 
