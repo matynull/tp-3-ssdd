@@ -7,7 +7,8 @@
     "dev-sucursal": "nodemon gestion-sucursales/index.js",
     "dev-noti": "nodemon gestion-notificaciones/index.cjs",
     "dev-reserva": "nodemon gestion-reservas/index.js",
-    "dev-recordatorio": "nodemon gestion-recordatorios/index.js"
+    "dev-recordatorio": "nodemon gestion-recordatorios/index.js",
+    "dev-gateway": "nodemon api-gateway/index.js"
   },
   "nodemonConfig": {
     "ignore": ["package.json","./gestion-reservas/turnos.json"]

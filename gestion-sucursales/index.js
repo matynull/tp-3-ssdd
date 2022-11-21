@@ -1,14 +1,14 @@
-import { createServer } from 'http';
-import { readFileSync } from 'fs';
+const http = require('http');
+const fs = require('fs');
 
-const server = createServer(async (req, res) => {
+const server = http.createServer(async (req, res) => {
     console.log(req.url);
 
     //Limpia url
     let parsedUrl = req.url.trim();
     parsedUrl = parsedUrl.replace(/^\/+|\/+$/g, "");
 
-    const data = readFileSync('./gestion_sucursales/sucursales.json',
+    const data = fs.readFileSync('./gestion-sucursales/sucursales.json',
         { encoding: 'utf8', flag: 'r' });
     let sucursales = JSON.parse(data);
 
@@ -35,6 +35,6 @@ const server = createServer(async (req, res) => {
 
 });
 
-server.listen(8080, function () {
+server.listen(8082, function () {
     console.log('Server started');
 });

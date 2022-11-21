@@ -42,7 +42,7 @@ const sendNotification = (email, datetime, callback) => {
     let data = {
         "destinatario":email,
         "asunto":"Notificación de turno",
-        "cuerpo":`Esto es un recordatorio de que tenes un turno el dia: ${d.getDate().toString().padStart(2, "0")}/${d.getMonth().toString().padStart(2, "0")}/${d.getFullYear().toString()} a las ${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`
+        "cuerpo":`Esto es un recordatorio de que tenes un turno el dia: ${d.getDate().toString().padStart(2, "0")}/${(d.getMonth()+1).toString().padStart(2, "0")}/${d.getFullYear().toString()} a las ${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`
     }      
 
     const request = http.request(options, function (response) {

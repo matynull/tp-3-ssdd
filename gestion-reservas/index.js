@@ -52,6 +52,7 @@ const server = http.createServer(async (req, res) => {
             let reservas = JSON.parse(data);
             //const objParam = { userId: null, branchId: null, dateTime: null }
             queryParams = url.parse(req.url, true).query;
+            console.log(queryParams);
             let results = reservas.filter(function (entry) {
                 return Object.keys(queryParams).every(function (key) {
                     return entry[key] == queryParams[key];
