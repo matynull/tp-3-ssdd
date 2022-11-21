@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const solicitar = function (req, res) {
+const solicitar = function (req, res, body) {
     let parsedUrl = req.url;
     let urlArr = parsedUrl.split("/");
     if (urlArr.length == 5 && !isNaN(urlArr[4])) {
@@ -18,6 +18,8 @@ const solicitar = function (req, res) {
         } else {
             let index = reservas.findIndex((i) => i.idReserva == reserva.idReserva);
             reserva.status = 2;
+            let aux = JSON.parse(body);
+            reserva.email = aux.email;
             reservas[index] = reserva;
             let reservasJSON = JSON.stringify(reservas)
             fs.writeFile('./gestion-reservas/turnos.json', reservasJSON, (err, data) => {

@@ -18,9 +18,9 @@ const solicitar = function (req, res, body) {
             res.end(JSON.stringify(`La reserva ya tiene usuario asignado`));
         } else {
             let index = reservas.findIndex((i) => i.idReserva == reserva.idReserva);
+            let aux = JSON.parse(body);
             reserva.status = 1;
-            // reserva.email = body.email;
-            reserva.userId = body.userId;
+            reserva.userId = aux.userId;
             console.log("Reserva: ");
             console.log(reserva);
             reservas[index] = reserva;
