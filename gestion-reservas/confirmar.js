@@ -27,6 +27,7 @@ const solicitar = function (req, res) {
             })
             res.writeHead(200, { "Content-Type": "application/json" });
             res.end(JSON.stringify(reserva));
+            return reserva.datetime;
         }
     } else {
         res.writeHead(404, { "Content-Type": "application/json" });

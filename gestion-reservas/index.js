@@ -18,11 +18,15 @@ const server = http.createServer(async (req, res) => {
     let urlArr = parsedUrl.split("/");
 
     if (req.url.startsWith("/api/reservas/confirmar") && req.method == 'POST') {
-        confirmar(req, res);
+        let date = confirmar(req, res);
+        console.log(date);
         let idReserva = urlArr[3];
         let reservaConfirmada = queueReservas.find(x => x.idReserva == idReserva);
         let index = queueReservas.findIndex((i) => i.idReserva == reservaConfirmada.idReserva);
         clearTimeout(reservaConfirmada.idTimeOut);
+        sendNotification(reservaConfirmada.email, date, (statusCode) => {
+            console.log(statusCode);
+        })
         queueReservas.splice(index);
     } else if (req.url.startsWith("/api/reservas/solicitar") && req.method == 'POST') {
         let options = "";
@@ -35,7 +39,7 @@ const server = http.createServer(async (req, res) => {
             let idTimeOut = setTimeout(() => {
                 resetReserva(idReserva);
             }, 30000, idReserva);
-            queueReservas.push({ idReserva: idReserva, idTimeOut: idTimeOut });
+            queueReservas.push({ idReserva: idReserva, idTimeOut: idTimeOut, email: body.email });
         })
     } else if (req.url.startsWith("/api/reservas") && req.method == 'GET') {
         if (urlArr.length == 3 && !isNaN(urlArr[2])) {
@@ -70,13 +74,43 @@ const server = http.createServer(async (req, res) => {
 
 });
 
-const findByMatchingProperties = (set, properties) => {
-    return set.filter(function (entry) {
-        return Object.keys(properties).every(function (key) {
-            return entry[key] === properties[key];
+
+const sendNotification = (email, datetime, callback) => {
+    let d = new Date(datetime);
+    console.log(d)
+    let options = {
+        "method": "POST",
+        "host": "localhost",
+        "port": "8080",
+        "path": "/api/notificacion",
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    };
+
+    let data = {
+        "destinatario": email,
+        "asunto": "Notificación de turno",
+        "cuerpo": `Reservaste un turno para el dia: ${d.getDate().toString().padStart(2, "0")}/${(d.getMonth()+1).toString().padStart(2, "0")}/${d.getFullYear().toString()} a las ${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`
+    }
+
+    const request = http.request(options, function (response) {
+        let body = ''
+        response.on('data', function (chunk) {
+            body += chunk;
+        });
+
+        response.on('end', function () {
+            callback(response.statusCode);
         });
     });
+    request.write(JSON.stringify(data));
+    request.end();
 }
+
+
+
+
 server.listen(8089, function () {
     console.log('Server started');
 });
