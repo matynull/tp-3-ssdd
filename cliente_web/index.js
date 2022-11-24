@@ -4,7 +4,6 @@ function recibeDatos(){
     var horario=document.getElementById("horario").value;
     var sucursal=document.getElementById("sucursales").value;
 
-   
 
     console.log(email,"\n",fecha,"\n",horario,"\n",sucursal);
 
