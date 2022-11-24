@@ -9,6 +9,7 @@ const solicitar = function (req, res, body) {
         let reservas = JSON.parse(data);
         let idReserva = parseInt(urlArr[4]);
         let reserva = reservas.find(x => x.idReserva == idReserva);
+        
         if (!reserva) {
             res.writeHead(404, { "Content-Type": "application/json" });
             res.end(JSON.stringify(`No se encontro la reserva ${idReserva}`));
@@ -17,9 +18,11 @@ const solicitar = function (req, res, body) {
             res.end(JSON.stringify(`La reserva ya tiene usuario asignado`));
         } else {
             let index = reservas.findIndex((i) => i.idReserva == reserva.idReserva);
+            let aux = JSON.parse(body);
             reserva.status = 1;
-            reserva.email = body.email;
-            reserva.userId = body.userId;
+            reserva.userId = aux.userId;
+            console.log("Reserva: ");
+            console.log(reserva);
             reservas[index] = reserva;
             let reservasJSON = JSON.stringify(reservas)
             fs.writeFile('./gestion-reservas/turnos.json', reservasJSON, (err, data) => {
