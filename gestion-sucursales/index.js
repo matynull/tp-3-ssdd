@@ -1,6 +1,8 @@
 const http = require('http');
 const fs = require('fs');
 
+require('dotenv').config();
+
 const server = http.createServer(async (req, res) => {
     console.log(req.url);
 
@@ -35,6 +37,6 @@ const server = http.createServer(async (req, res) => {
 
 });
 
-server.listen(8082, function () {
+server.listen(process.env.PORT_SUCURSALES, function () {
     console.log('Server started');
 });

@@ -5,6 +5,8 @@ const url = require('url');
 const solicitar = require('./solicitar.js');
 const resetReserva = require('./resetReserva.js');
 const confirmar = require('./confirmar.js');
+
+require('dotenv').config();
 //const getReservas = require('./getReservas.cjs');
 const queueReservas = [];
 
@@ -114,10 +116,6 @@ const sendNotification = (email, datetime, callback) => {
     request.write(JSON.stringify(data));
     request.end();
 }
-
-
-
-
-server.listen(8089, function () {
+server.listen(process.env.PORT_RESERVAS, function () {
     console.log('Server started');
 });
