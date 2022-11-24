@@ -1,6 +1,6 @@
 const http = require('http');
 const fs = require('fs');
-require('dotenv').config()
+require('dotenv').config();
 
 const intervalo = process.env.INTERVALO_CHECK_NOTIFICACION;
 console.log(`Iniciando intervalo en: ${intervalo} segundos`);
@@ -31,8 +31,8 @@ const sendNotification = (email, datetime, callback) => {
     let d = new Date(datetime);
     let options = {
         "method": "POST",
-        "host": "localhost",
-        "port": "8080",
+        "host": process.env.IP_NOTIFICACIONES,
+        "port": process.env.PORT_NOTIFICACIONES,
         "path": "/api/notificacion",
         "headers": {
             "Content-Type": "application/json"

@@ -1,15 +1,15 @@
 const http = require('http');
 const url = require('url');
-require('dotenv').config()
+require('dotenv').config();
 
 let urlMapping = {
     "reservas" : {
-        "host" : "localhost",
-        "port" : 8089
+        "host" : process.env.IP_RESERVAS,
+        "port" : process.env.PORT_RESERVAS
     },
     "sucursales" : {
-        "host" : "localhost",
-        "port" : 8082
+        "host" : process.env.IP_SUCURSALES,
+        "port" : process.env.PORT_SUCURSALES
     }
 }
 
@@ -67,51 +67,6 @@ const server = http.createServer(async (req, res) => {
     })
 });
 
-server.listen(8087, function () {
+server.listen(process.env.PORT_GATEWAY, function () {
     console.log('Server started');
 });
-
-// Todo esto es para mandar mail con sendgrid
-
-let sendMail = (options,callback) => {
-    let emailOptions = {
-        "method": "POST",
-        "host": "api.sendgrid.com",
-        "path": "/v3/mail/send",
-        "headers": {
-            "Authorization": `${process.env.API_KEY}`,
-            "Content-Type": "application/json"
-        }
-    };
-
-    let data = {
-        "personalizations": [
-            {
-                "to": [
-                    {
-                        "email": options.destinatario
-                    }
-                ],
-                "subject": options.asunto
-            }
-        ],
-        "content": [{ "type": "text/plain", "value": options.cuerpo }],
-        "from": { "email": `${process.env.MAIL}`, "name": "Matias" },
-        "reply_to": { "email": `${process.env.MAIL}`, "name": "Matias" }
-    }
-
-    const request = https.request(emailOptions, function (response) {
-
-        let body = ''
-        response.on('data', function (chunk) {
-            body += chunk;
-        });
-
-        response.on('end', function () {
-            callback(response.statusCode);
-        });
-
-    });
-    request.write(JSON.stringify(data));
-    request.end();
-}
