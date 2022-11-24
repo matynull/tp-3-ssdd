@@ -25,7 +25,7 @@ const server = http.createServer(async (req, res) => {
             options += chunk.toString();
         }).on('end', () => {
           let body = JSON.parse(options);
-          let date = confirmar(req, res);
+          let date = confirmar(req, res, body);
           console.log(date);
           let idReserva = urlArr[3];
           let reservaConfirmada = queueReservas.find(x => x.idReserva == idReserva);
