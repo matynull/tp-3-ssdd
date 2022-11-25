@@ -1,5 +1,6 @@
 let globalSucursales = {};
 let globalMapUUID = "9781696f-9974-4d98-b876-05ed91e75607";
+let globalMapToken = "";
 
 document.addEventListener("DOMContentLoaded", () => {
     var botonenv =document.getElementById("btnenv");
@@ -128,6 +129,26 @@ const pedirSucursales = () => {
     }).then((res) => {return res.json()}, () => {alert("Hubo un error cargando las sucursales.")}).then((data) => {
         console.log(data);
         let markers = data;
+        crearMapa(() => {
+            agregarMarcador(markers, 0, () => {
+                console.log("Sucursales cargadas");
+            });
+        })
+        agregarSucursalesASelect(markers);
+        if(markers.length > 0){
+            pedirReservas(markers[0].id);
+        }
+    });
+}
+
+const pedirSucursalesOld = () => {
+    fetch(`http://localhost:8080/api/sucursales`,
+    {
+        method:"GET",
+        headers:{'Accept': 'application/json'}
+    }).then((res) => {return res.json()}, () => {alert("Hubo un error cargando las sucursales.")}).then((data) => {
+        console.log(data);
+        let markers = data;
         eliminarMarcadores(() => {
             agregarMarcador(markers, 0, () => {
                 console.log("Sucursales cargadas");
@@ -150,24 +171,28 @@ const agregarSucursalesASelect = (markers) => {
 }
 
 //Crear mapa
-const crearMapa = () => {
+const crearMapa = (callback) => {
     fetch(`https://cartes.io/api/maps`,
     {
         method:"POST",
-        headers:{'Accept': 'application/json'},
+        headers:{'Accept': 'application/json', 'Content-Type': 'application/json'},
         body:JSON.stringify({
             privacy:"public",
             users_can_create_markers:"yes"
         })
     }).then((res) => {return res.json()}, () => {alert("Hubo un error cargando las sucursales.")}).then((data) => {
         console.log(data);
+        globalMapUUID = data.uuid;
+        globalMapToken = data.token;
+        document.getElementById("mapas").querySelector("iframe").src = `https://app.cartes.io/maps/${globalMapUUID}/embed?type=map&lat=-37.99299224038733&lng=-57.57084846496583&zoom=13`;
+        callback();
     });
 }
 
 const agregarMarcador = (markers, i, callback) => {
     if(i < markers.length){
         let curMark = markers[i];
-        fetch(`https://cartes.io/api/maps/${globalMapUUID}/markers?map_token=8R1hMPvRLMDA4bBZRLHzVpuZFJzfR4Fg`,
+        fetch(`https://cartes.io/api/maps/${globalMapUUID}/markers?map_token=${globalMapToken}`,
         {
             method:"POST",
             headers:{'Accept': 'application/json',
@@ -190,7 +215,7 @@ const agregarMarcador = (markers, i, callback) => {
 }
 
 const eliminarMarcadores = (callback) => {
-    fetch(`https://cartes.io/api/maps/${globalMapUUID}/markers?map_token=8R1hMPvRLMDA4bBZRLHzVpuZFJzfR4Fg`,
+    fetch(`https://cartes.io/api/maps/${globalMapUUID}/markers?map_token=${globalMapToken}`,
     {
         method:"GET",
         headers:{'Accept': 'application/json',
@@ -207,7 +232,7 @@ const eliminarMarcadores = (callback) => {
 
 const eliminarMarcador = (markers, i, callback) => {
     if(i < markers.length){
-        fetch(`https://cartes.io/api/maps/${globalMapUUID}/markers/${markers[i].id}?map_token=8R1hMPvRLMDA4bBZRLHzVpuZFJzfR4Fg`,
+        fetch(`https://cartes.io/api/maps/${globalMapUUID}/markers/${markers[i].id}?map_token=${globalMapToken}`,
     {
         method:"DELETE",
         headers:{'Accept': 'application/json',
