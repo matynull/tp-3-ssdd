@@ -49,6 +49,7 @@ const server = http.createServer(async (req, res) => {
                     });
             
                     proxyRes.on('end', function () {
+                        res.setHeader("Access-Control-Allow-Origin", "*");
                         res.writeHead(proxyRes.statusCode, proxyRes.headers);
                         res.write(proxyBody)
                         res.end();
@@ -59,7 +60,7 @@ const server = http.createServer(async (req, res) => {
                 proxyReq.end();
             }
         }else{
-            res.writeHead(404, { "Content-Type": "application/json" });
+            res.writeHead(404, { "Content-Type": "application/json"});
             res.end("No se encontro el recurso.");
         }
 

@@ -1,14 +1,26 @@
 [
     {
-        "id": 3,
-        "lat": -38.012061, 
-        "lng": -57.5835651,
+        "id": 1,
+        "lat": -37.964870, 
+        "lng": -57.570289,
         "name": "Sucursal del sur" 
     },
     {
-        "id": 4,
+        "id": 2,
         "lat": -38.012061, 
-        "lng": -52.5835651,
+        "lng": -57.5835651,
+        "name": "Sucursal del pibe" 
+    },
+    {
+        "id": 3,
+        "lat": -38.035261, 
+        "lng": -57.552145,
+        "name": "Sucursal del toto" 
+    },
+    {
+        "id": 4,
+        "lat": -37.958191, 
+        "lng": -57.572104,
         "name": "Sucursal del norte" 
     }
 ]
