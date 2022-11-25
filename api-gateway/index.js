@@ -38,7 +38,6 @@ const server = http.createServer(async (req, res) => {
                         "Content-Type": "application/json"
                     }
                 };
-                console.log(options);
 
                 let data = body;
 
