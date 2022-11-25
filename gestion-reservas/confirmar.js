@@ -12,9 +12,11 @@ const confirmar = function (req, res, body) {
         if (!reserva) {
             res.writeHead(404, { "Content-Type": "application/json" });
             res.end(JSON.stringify(`No se encontro la reserva ${idReserva}`));
+            return false;
         } else if (reserva.status != 1) {
-            res.writeHead(400, { "Content-Type": "application/json" });
+            res.writeHead(406, { "Content-Type": "application/json" });
             res.end(JSON.stringify(`La reserva ya tiene usuario asignado`));
+            return false;
         } else {
             let index = reservas.findIndex((i) => i.idReserva == reserva.idReserva);
             reserva.status = 2;
@@ -34,6 +36,7 @@ const confirmar = function (req, res, body) {
     } else {
         res.writeHead(404, { "Content-Type": "application/json" });
         res.end("No se encontro el recurso.");
+        return false;
     }
 }
 

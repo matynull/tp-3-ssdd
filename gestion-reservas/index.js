@@ -26,14 +26,17 @@ const server = http.createServer(async (req, res) => {
         }).on('end', () => {
           let body = JSON.parse(options);
           let date = confirmar(req, res, body);
-          let idReserva = urlArr[3];
-          let reservaConfirmada = queueReservas.find(x => x.idReserva == idReserva);
-          let index = queueReservas.findIndex((i) => i.idReserva == reservaConfirmada.idReserva);
-          clearTimeout(reservaConfirmada.idTimeOut);
-          sendNotification(JSON.parse(body).email, date, (statusCode) => {
-              console.log("Response Twilio: "+statusCode);
-          })
-          queueReservas.splice(index);
+          if(date){
+              let idReserva = urlArr[3];
+              let reservaConfirmada = queueReservas.find(x => x.idReserva == idReserva);
+              let index = queueReservas.findIndex((i) => i.idReserva == reservaConfirmada.idReserva);
+              console.log("Clear Timeout: "+reservaConfirmada.idTimeOut);
+              clearTimeout(reservaConfirmada.idTimeOut);
+              sendNotification(JSON.parse(body).email, date, (statusCode) => {
+                  console.log("Response Twilio: "+statusCode);
+              })
+              queueReservas.splice(index);
+          }
         })
     } else if (req.url.startsWith("/api/reservas/solicitar") && req.method == 'POST') {
         let options = "";
@@ -41,12 +44,15 @@ const server = http.createServer(async (req, res) => {
             options += chunk;
         }).on('end', () => {
             let body = JSON.parse(options);
-            solicitar(req, res, body);
-            let idReserva = urlArr[3];
-            let idTimeOut = setTimeout(() => {
-                resetReserva(idReserva);
-            }, 30000, idReserva);
-            queueReservas.push({ idReserva: idReserva, idTimeOut: idTimeOut});
+            let exito = solicitar(req, res, body);
+            if(exito){
+                let idReserva = urlArr[3];
+                let idTimeOut = setTimeout(() => {
+                    resetReserva(idReserva, queueReservas);
+                }, 10000, idReserva);
+                console.log("Set Timeout: "+idTimeOut);
+                queueReservas.push({ idReserva: idReserva, idTimeOut: idTimeOut});
+            }
         })
     } else if (req.url.startsWith("/api/reservas") && req.method == 'GET') {
         if (urlArr.length == 3 && !isNaN(urlArr[2])) {

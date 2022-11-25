@@ -1,20 +1,17 @@
 let globalSucursales = {};
 let globalMapUUID = "9781696f-9974-4d98-b876-05ed91e75607";
 
-function recibeDatos(){
-    var email=document.getElementById("email").value;
-    var fecha=document.getElementById("fecha").value;
-    var horario=document.getElementById("horario").value;
-    var sucursal=document.getElementById("sucursales").value;
-
-    console.log(email,"\n",fecha,"\n",horario,"\n",sucursal);
-}
-
 document.addEventListener("DOMContentLoaded", () => {
     var botonenv =document.getElementById("btnenv");
+    var botonconf =document.getElementById("btnconf");
     botonenv.addEventListener("click",function(event){
-        validacion();
-        pedirReservas();
+        pedirReserva();
+    });
+    botonconf.addEventListener("click",function(event){
+        let val = validacion();
+        if(val){
+            confirmarReserva();
+        }
     });
     pedirSucursales();
 
@@ -37,12 +34,7 @@ function validaVacio(valor) {
     }
 
     function validacion(){
-        // var expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-        // if ( !expr.test(email)){                                                            
-        //     alert("Error: La dirección de email " + email + " es incorrecta.");
-        //     return false;
-        // }
-        if (validaVacio(email.value)) {  
+        if (!email.value) {  
             alert("Los campos no pueden quedar vacios");
             return false;
         }
@@ -52,16 +44,19 @@ function validaVacio(valor) {
 // GET /api/reservas
 const pedirReservas = (sucursal) => {
     document.getElementById("reserva").innerHTML = `<option value="">Cargando...</option>`;
-    fetch(`http://localhost:8080/api/reservas?branchId=${sucursal}`, 
+    fetch(`http://localhost:8080/api/reservas?branchId=${sucursal}&status=0`, 
     {
         method: "GET",
         headers: {'Accept': 'application/json'}
     }).then(res=>res.json()).then((data) => {
         console.log(data);
-        let select = document.getElementById("reservas");
+        let select = document.getElementById("reserva");
         let elems = "";
-        markers.forEach((m) => {
-            elems += `<option value="${m.id}">${m.name}</option>`;
+        data = data.sort((a, b) => {return a.datetime.localeCompare(b.datetime)});
+        data.forEach((r) => {
+            let d = new Date(r.datetime);
+            let fecha = `${d.getDate().toString().padStart(2, "0")}/${(d.getMonth()+1).toString().padStart(2, "0")}/${d.getFullYear().toString()} a las ${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`
+            elems += `<option value="${r.idReserva}">${fecha}</option>`;
         });
         select.innerHTML = elems;
     });
@@ -69,19 +64,51 @@ const pedirReservas = (sucursal) => {
 
 // alta reserva                                         //aca va el idReserva
 function pedirReserva() {
-    fetch(`https://localhost:8080/api/reservas/confirmar/ `, {
+    let resId = document.getElementById("reserva").value;
+    fetch(`http://localhost:8080/api/reservas/solicitar/${resId}`, {
+        method: "POST",
+        headers: { 'Accept': 'application/json' },
+        body: JSON.stringify({
+            "userId": 0
+        })
+    }).then(res => {
+        console.log(res);
+        if (res.status == 200) {
+            console.log("reserva exitosa");
+            document.getElementById("form-solicitud").style.display = "none";
+            document.getElementById("form-confirmacion").style.display = null;
+        }
+        else if(res.status == 406){
+            console.log("error");
+            alert("La reserva ya esta tomada por otro usuario.");
+        }else{
+            alert("No se q paso");
+        }
+    });
+}
+
+function confirmarReserva() {
+    let resId = document.getElementById("reserva").value;
+    let email = document.getElementById("email").value;
+    fetch(`http://localhost:8080/api/reservas/confirmar/${resId}`, {
         method: "POST",
         headers: { 'Accept': 'application/json' },
         body: JSON.stringify({
             "userId": 0,
-            "email": email,
+            "email" : email
         })
     }).then(res => {
+        console.log(res);
         if (res.status == 200) {
             console.log("reserva exitosa");
+            document.getElementById("form-confirmacion").style.display = "none";
+            document.getElementById("pantalla-exitosa").style.display = null;
         }
-        else {
+        else if(res.status == 406){
             console.log("error");
+            alert("La reserva ya esta tomada por otro usuario.");
+        }else{
+            alert("No se q paso");
         }
     });
 }
@@ -107,9 +134,12 @@ const pedirSucursales = () => {
         eliminarMarcadores(() => {
             agregarMarcador(markers, 0, () => {
                 console.log("Sucursales cargadas");
-            })
+            });
         });
         agregarSucursalesASelect(markers);
+        if(markers.length > 0){
+            pedirReservas(markers[0].id);
+        }
     });
 }
 
