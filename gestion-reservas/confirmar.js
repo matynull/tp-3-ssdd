@@ -18,7 +18,6 @@ const confirmar = function (req, res, body) {
         } else {
             let index = reservas.findIndex((i) => i.idReserva == reserva.idReserva);
             reserva.status = 2;
-            console.log(body);
             let aux = JSON.parse(body);
             reserva.email = aux.email;
             reservas[index] = reserva;

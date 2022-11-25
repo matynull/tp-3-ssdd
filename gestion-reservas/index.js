@@ -22,24 +22,23 @@ const server = http.createServer(async (req, res) => {
     if (req.url.startsWith("/api/reservas/confirmar") && req.method == 'POST') {
         let options = "";
         req.on('data', (chunk) => {
-            options += chunk.toString();
+            options += chunk;
         }).on('end', () => {
           let body = JSON.parse(options);
           let date = confirmar(req, res, body);
-          console.log(date);
           let idReserva = urlArr[3];
           let reservaConfirmada = queueReservas.find(x => x.idReserva == idReserva);
           let index = queueReservas.findIndex((i) => i.idReserva == reservaConfirmada.idReserva);
           clearTimeout(reservaConfirmada.idTimeOut);
-          sendNotification(reservaConfirmada.email, date, (statusCode) => {
-              console.log(statusCode);
+          sendNotification(JSON.parse(body).email, date, (statusCode) => {
+              console.log("Response Twilio: "+statusCode);
           })
           queueReservas.splice(index);
         })
     } else if (req.url.startsWith("/api/reservas/solicitar") && req.method == 'POST') {
         let options = "";
         req.on('data', (chunk) => {
-            options += chunk.toString();
+            options += chunk;
         }).on('end', () => {
             let body = JSON.parse(options);
             solicitar(req, res, body);
@@ -47,7 +46,7 @@ const server = http.createServer(async (req, res) => {
             let idTimeOut = setTimeout(() => {
                 resetReserva(idReserva);
             }, 30000, idReserva);
-            queueReservas.push({ idReserva: idReserva, idTimeOut: idTimeOut, email: body.email });
+            queueReservas.push({ idReserva: idReserva, idTimeOut: idTimeOut});
         })
     } else if (req.url.startsWith("/api/reservas") && req.method == 'GET') {
         if (urlArr.length == 3 && !isNaN(urlArr[2])) {
@@ -64,13 +63,11 @@ const server = http.createServer(async (req, res) => {
             let reservas = JSON.parse(data);
             //const objParam = { userId: null, branchId: null, dateTime: null }
             queryParams = url.parse(req.url, true).query;
-            console.log(queryParams);
             let results = reservas.filter(function (entry) {
                 return Object.keys(queryParams).every(function (key) {
                     return entry[key] == queryParams[key];
                 });
             });
-            console.log(results);
             res.writeHead(200, { "Content-Type": "application/json" });
             res.end(JSON.stringify(results));
         }
@@ -86,11 +83,10 @@ const server = http.createServer(async (req, res) => {
 
 const sendNotification = (email, datetime, callback) => {
     let d = new Date(datetime);
-    console.log(d)
     let options = {
         "method": "POST",
-        "host": "localhost",
-        "port": "8080",
+        "host": process.env.IP_NOTIFICACIONES,
+        "port": process.env.PORT_NOTIFICACIONES,
         "path": "/api/notificacion",
         "headers": {
             "Content-Type": "application/json"
