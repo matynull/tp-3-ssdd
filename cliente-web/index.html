@@ -12,39 +12,45 @@
 
 <body>
     <!-- FORMULARIO -->
-    <form id="datosentrada">
-        <label name="email">Ingrese su E-mail </label>
-        <input type="email" id="email" > <br>
-        <br>
-
-        <label name="fecha">Ingrese el dia </label>  <!-- esto hay que cambiarlo creo -->
-        <input type="date" id="fecha"><br>
-        <br>
-
-        <label name="horario">Seleccione el horario </label>
-        <input type="time" id="horario"><br>
-        <br>
+    <div class="col-izquierda">
+        <form id="datosentrada">
+            <div id="form-solicitud">    
+                <label name="sucursales">Seleccione la sucursal </label>
+                <select id="sucursales">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select><br>
         
-        <label name="sucursales">Seleccione la sucursal </label>
-        <select id="sucursales">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-        </select>
-        <br>
-        <button type="button" onclick="recibeDatos()">Enviar</button>
-        
-    </form>
-    <!-- MAPA -->
-    <div id="mapas">
-         <iframe src="https://app.cartes.io/maps/695eec4d-cec4-40e5-9d20-c6fca874a941/embed?type=map&lat=-37.99299224038733&lng=-57.57084846496583&zoom=13"
-        width="50%"
-        height="600"
-        frameborder="0">
-        </iframe> 
+                <label name="reserva">Ingrese el turno </label>  
+                <select id="reserva"></select><br>
+                <br>
+                
+                <br>
+                <button id="btnenv" type="button">Enviar</button>
+            </div>
+            <div id="form-confirmacion" style="display:none;">
+                <label name="email">Ingrese su E-mail </label>
+                <input type="email" id="email" autocomplete="email"> <br>
+                <br>
+    
+                <br>
+                <button id="btnconf" type="button">Confirmar</button>
+            </div>
+            <div id="pantalla-exitosa" style="display:none;">
+                <label name="email">Reservado con exito </label>
+            </div>
+        </form>
     </div>
-    
-    
+    <!-- MAPA -->
+    <div class="col-derecha">
+        <div id="mapas">
+             <iframe src="https://app.cartes.io/maps/9781696f-9974-4d98-b876-05ed91e75607/embed?type=map&lat=-37.99299224038733&lng=-57.57084846496583&zoom=13"
+            height="600"
+            frameborder="0">
+            </iframe> 
+        </div>
+    </div>
 </body>
 </html>

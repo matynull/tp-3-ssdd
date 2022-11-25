@@ -1,15 +1,18 @@
 
 body{
   background-color: #282a36;
-  color:rgb(255, 255, 255)
+  color:rgb(255, 255, 255);
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
 }
 #datosentrada {
-  width: 400px;
+  /* width: 400px; */
   background: #24303c;
   padding: 40px;
   margin: left;
-  margin-top: 300px;
-  margin-left: 250px;
+  margin-top: 160px;
+  /* margin-left: 250px; */
   border-radius: 30px;
   font-family: 'calibri';
   font-size:x-large;
@@ -18,9 +21,30 @@ body{
 }
 
 #mapas{
-  display: flex;
-  justify-content: right;
-  margin-top: -375px;
-  
+  /* display: flex; */
+  /* justify-content: right; */
+  /* margin-top: -375px; */
 } 
 
+
+
+.col-derecha {
+    flex-grow: 3;
+    /* width: 100%; */
+}
+
+iframe {
+    width: 100%;
+}
+
+.col-izquierda {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-grow: 2;
+    flex-basis: fit-content;
+}
+
+html {
+    width: 100%;
+}
