@@ -116,9 +116,6 @@ function confirmarReserva() {
 
 //DELETE /api/
 
-
-
-
 //GET /api/
 
 // GET /api/sucursales
